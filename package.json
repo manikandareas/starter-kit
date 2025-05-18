@@ -13,6 +13,7 @@
     "check": "biome check"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.31.4",
     "@t3-oss/env-core": "^0.12.0",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-router": "^1.114.3",
@@ -33,6 +34,7 @@
     "@biomejs/biome": "1.9.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
+    "@types/node": "^22.15.18",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",

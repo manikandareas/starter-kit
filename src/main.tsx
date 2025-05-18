@@ -6,7 +6,9 @@ import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { ConvexReactClient } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { env } from "./env.ts";
 import reportWebVitals from "./reportWebVitals.ts";
 
@@ -29,15 +31,23 @@ declare module "@tanstack/react-router" {
 
 const convex = new ConvexReactClient(env.VITE_CONVEX_URL);
 
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+	throw new Error("Missing Publishable Key");
+}
+
 // Render the app
 const rootElement = document.getElementById("app");
 if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
 		<StrictMode>
-			<ConvexProvider client={convex}>
-				<RouterProvider router={router} />
-			</ConvexProvider>
+			<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+				<ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+					<RouterProvider router={router} />
+				</ConvexProviderWithClerk>
+			</ClerkProvider>
 		</StrictMode>,
 	);
 }
