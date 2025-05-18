@@ -1,3 +1,4 @@
+import { ConvexQueryClient } from "@convex-dev/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
@@ -7,6 +8,7 @@ import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { env } from "./env.ts";
@@ -14,8 +16,11 @@ import reportWebVitals from "./reportWebVitals.ts";
 
 // Create a new router instance
 const router = createRouter({
+	context: {
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		queryClient: undefined!,
+	},
 	routeTree,
-	context: {},
 	defaultPreload: "intent",
 	scrollRestoration: true,
 	defaultStructuralSharing: true,
@@ -29,7 +34,20 @@ declare module "@tanstack/react-router" {
 	}
 }
 
+// Convex client
 const convex = new ConvexReactClient(env.VITE_CONVEX_URL);
+
+const convexQueryClient = new ConvexQueryClient(convex);
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			queryKeyHashFn: convexQueryClient.hashFn(),
+			queryFn: convexQueryClient.queryFn(),
+		},
+	},
+});
+
+convexQueryClient.connect(queryClient);
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -45,7 +63,9 @@ if (rootElement && !rootElement.innerHTML) {
 		<StrictMode>
 			<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
 				<ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-					<RouterProvider router={router} />
+					<QueryClientProvider client={queryClient}>
+						<RouterProvider router={router} />
+					</QueryClientProvider>
 				</ConvexProviderWithClerk>
 			</ClerkProvider>
 		</StrictMode>,

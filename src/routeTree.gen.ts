@@ -12,12 +12,18 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthenticatedLayoutImport } from './routes/_authenticated/_layout'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedLayoutRoute = AuthenticatedLayoutImport.update({
+  id: '/_authenticated/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -32,6 +38,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/_layout': {
+      id: '/_authenticated/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedLayoutImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +52,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedLayoutRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedLayoutRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_authenticated/_layout': typeof AuthenticatedLayoutRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | ''
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | ''
+  id: '__root__' | '/' | '/_authenticated/_layout'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedLayoutRoute: typeof AuthenticatedLayoutRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedLayoutRoute: AuthenticatedLayoutRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +95,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/_authenticated/_layout"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/_authenticated/_layout": {
+      "filePath": "_authenticated/_layout.tsx"
     }
   }
 }
