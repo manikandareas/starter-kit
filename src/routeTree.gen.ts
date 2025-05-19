@@ -8,13 +8,30 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthenticatedLayoutImport } from './routes/_authenticated/_layout'
+import { Route as AppAuthenticatedImport } from './routes/_app/_authenticated'
+import { Route as AppAuthenticatedDashboardImport } from './routes/_app/_authenticated/dashboard'
+import { Route as AppAuthenticatedOnboardingLayoutImport } from './routes/_app/_authenticated/onboarding/_layout'
+import { Route as AppAuthenticatedOnboardingLayoutUsernameImport } from './routes/_app/_authenticated/onboarding/_layout.username'
+
+// Create Virtual Routes
+
+const AppAuthenticatedOnboardingImport = createFileRoute(
+  '/_app/_authenticated/onboarding',
+)()
 
 // Create/Update Routes
+
+const AppRoute = AppImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -22,10 +39,37 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthenticatedLayoutRoute = AuthenticatedLayoutImport.update({
-  id: '/_authenticated/_layout',
-  getParentRoute: () => rootRoute,
+const AppAuthenticatedRoute = AppAuthenticatedImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => AppRoute,
 } as any)
+
+const AppAuthenticatedOnboardingRoute = AppAuthenticatedOnboardingImport.update(
+  {
+    id: '/onboarding',
+    path: '/onboarding',
+    getParentRoute: () => AppAuthenticatedRoute,
+  } as any,
+)
+
+const AppAuthenticatedDashboardRoute = AppAuthenticatedDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppAuthenticatedRoute,
+} as any)
+
+const AppAuthenticatedOnboardingLayoutRoute =
+  AppAuthenticatedOnboardingLayoutImport.update({
+    id: '/_layout',
+    getParentRoute: () => AppAuthenticatedOnboardingRoute,
+  } as any)
+
+const AppAuthenticatedOnboardingLayoutUsernameRoute =
+  AppAuthenticatedOnboardingLayoutUsernameImport.update({
+    id: '/username',
+    path: '/username',
+    getParentRoute: () => AppAuthenticatedOnboardingLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -38,51 +82,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated/_layout': {
-      id: '/_authenticated/_layout'
+    '/_app': {
+      id: '/_app'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthenticatedLayoutImport
+      preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
+    }
+    '/_app/_authenticated': {
+      id: '/_app/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppAuthenticatedImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/_authenticated/dashboard': {
+      id: '/_app/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppAuthenticatedDashboardImport
+      parentRoute: typeof AppAuthenticatedImport
+    }
+    '/_app/_authenticated/onboarding': {
+      id: '/_app/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AppAuthenticatedOnboardingImport
+      parentRoute: typeof AppAuthenticatedImport
+    }
+    '/_app/_authenticated/onboarding/_layout': {
+      id: '/_app/_authenticated/onboarding/_layout'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AppAuthenticatedOnboardingLayoutImport
+      parentRoute: typeof AppAuthenticatedOnboardingRoute
+    }
+    '/_app/_authenticated/onboarding/_layout/username': {
+      id: '/_app/_authenticated/onboarding/_layout/username'
+      path: '/username'
+      fullPath: '/onboarding/username'
+      preLoaderRoute: typeof AppAuthenticatedOnboardingLayoutUsernameImport
+      parentRoute: typeof AppAuthenticatedOnboardingLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AppAuthenticatedOnboardingLayoutRouteChildren {
+  AppAuthenticatedOnboardingLayoutUsernameRoute: typeof AppAuthenticatedOnboardingLayoutUsernameRoute
+}
+
+const AppAuthenticatedOnboardingLayoutRouteChildren: AppAuthenticatedOnboardingLayoutRouteChildren =
+  {
+    AppAuthenticatedOnboardingLayoutUsernameRoute:
+      AppAuthenticatedOnboardingLayoutUsernameRoute,
+  }
+
+const AppAuthenticatedOnboardingLayoutRouteWithChildren =
+  AppAuthenticatedOnboardingLayoutRoute._addFileChildren(
+    AppAuthenticatedOnboardingLayoutRouteChildren,
+  )
+
+interface AppAuthenticatedOnboardingRouteChildren {
+  AppAuthenticatedOnboardingLayoutRoute: typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
+}
+
+const AppAuthenticatedOnboardingRouteChildren: AppAuthenticatedOnboardingRouteChildren =
+  {
+    AppAuthenticatedOnboardingLayoutRoute:
+      AppAuthenticatedOnboardingLayoutRouteWithChildren,
+  }
+
+const AppAuthenticatedOnboardingRouteWithChildren =
+  AppAuthenticatedOnboardingRoute._addFileChildren(
+    AppAuthenticatedOnboardingRouteChildren,
+  )
+
+interface AppAuthenticatedRouteChildren {
+  AppAuthenticatedDashboardRoute: typeof AppAuthenticatedDashboardRoute
+  AppAuthenticatedOnboardingRoute: typeof AppAuthenticatedOnboardingRouteWithChildren
+}
+
+const AppAuthenticatedRouteChildren: AppAuthenticatedRouteChildren = {
+  AppAuthenticatedDashboardRoute: AppAuthenticatedDashboardRoute,
+  AppAuthenticatedOnboardingRoute: AppAuthenticatedOnboardingRouteWithChildren,
+}
+
+const AppAuthenticatedRouteWithChildren =
+  AppAuthenticatedRoute._addFileChildren(AppAuthenticatedRouteChildren)
+
+interface AppRouteChildren {
+  AppAuthenticatedRoute: typeof AppAuthenticatedRouteWithChildren
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAuthenticatedRoute: AppAuthenticatedRouteWithChildren,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthenticatedLayoutRoute
+  '': typeof AppAuthenticatedRouteWithChildren
+  '/dashboard': typeof AppAuthenticatedDashboardRoute
+  '/onboarding': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
+  '/onboarding/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthenticatedLayoutRoute
+  '': typeof AppAuthenticatedRouteWithChildren
+  '/dashboard': typeof AppAuthenticatedDashboardRoute
+  '/onboarding': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
+  '/onboarding/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_authenticated/_layout': typeof AuthenticatedLayoutRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_app/_authenticated': typeof AppAuthenticatedRouteWithChildren
+  '/_app/_authenticated/dashboard': typeof AppAuthenticatedDashboardRoute
+  '/_app/_authenticated/onboarding': typeof AppAuthenticatedOnboardingRouteWithChildren
+  '/_app/_authenticated/onboarding/_layout': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
+  '/_app/_authenticated/onboarding/_layout/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | ''
+  fullPaths: '/' | '' | '/dashboard' | '/onboarding' | '/onboarding/username'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | ''
-  id: '__root__' | '/' | '/_authenticated/_layout'
+  to: '/' | '' | '/dashboard' | '/onboarding' | '/onboarding/username'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/_app/_authenticated'
+    | '/_app/_authenticated/dashboard'
+    | '/_app/_authenticated/onboarding'
+    | '/_app/_authenticated/onboarding/_layout'
+    | '/_app/_authenticated/onboarding/_layout/username'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedLayoutRoute: typeof AuthenticatedLayoutRoute
+  AppRoute: typeof AppRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedLayoutRoute: AuthenticatedLayoutRoute,
+  AppRoute: AppRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -96,14 +247,47 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_authenticated/_layout"
+        "/_app"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/_authenticated/_layout": {
-      "filePath": "_authenticated/_layout.tsx"
+    "/_app": {
+      "filePath": "_app.tsx",
+      "children": [
+        "/_app/_authenticated"
+      ]
+    },
+    "/_app/_authenticated": {
+      "filePath": "_app/_authenticated.tsx",
+      "parent": "/_app",
+      "children": [
+        "/_app/_authenticated/dashboard",
+        "/_app/_authenticated/onboarding"
+      ]
+    },
+    "/_app/_authenticated/dashboard": {
+      "filePath": "_app/_authenticated/dashboard.tsx",
+      "parent": "/_app/_authenticated"
+    },
+    "/_app/_authenticated/onboarding": {
+      "filePath": "_app/_authenticated/onboarding",
+      "parent": "/_app/_authenticated",
+      "children": [
+        "/_app/_authenticated/onboarding/_layout"
+      ]
+    },
+    "/_app/_authenticated/onboarding/_layout": {
+      "filePath": "_app/_authenticated/onboarding/_layout.tsx",
+      "parent": "/_app/_authenticated/onboarding",
+      "children": [
+        "/_app/_authenticated/onboarding/_layout/username"
+      ]
+    },
+    "/_app/_authenticated/onboarding/_layout/username": {
+      "filePath": "_app/_authenticated/onboarding/_layout.username.tsx",
+      "parent": "/_app/_authenticated/onboarding/_layout"
     }
   }
 }

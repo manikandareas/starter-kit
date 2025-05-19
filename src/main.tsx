@@ -9,7 +9,7 @@ import { routeTree } from "./routeTree.gen";
 import "./styles.css";
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConvexReactClient } from "convex/react";
+import { ConvexReactClient, useConvexAuth } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { env } from "./env.ts";
 import reportWebVitals from "./reportWebVitals.ts";
@@ -19,6 +19,10 @@ const router = createRouter({
 	context: {
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		queryClient: undefined!,
+		auth: {
+			isAuthenticated: false,
+			isLoading: true,
+		},
 	},
 	routeTree,
 	defaultPreload: "intent",
@@ -55,6 +59,22 @@ if (!PUBLISHABLE_KEY) {
 	throw new Error("Missing Publishable Key");
 }
 
+const InnerApp = () => {
+	const { isAuthenticated, isLoading } = useConvexAuth();
+	return (
+		<RouterProvider
+			router={router}
+			context={{
+				queryClient,
+				auth: {
+					isAuthenticated,
+					isLoading,
+				},
+			}}
+		/>
+	);
+};
+
 // Render the app
 const rootElement = document.getElementById("app");
 if (rootElement && !rootElement.innerHTML) {
@@ -64,7 +84,7 @@ if (rootElement && !rootElement.innerHTML) {
 			<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
 				<ConvexProviderWithClerk client={convex} useAuth={useAuth}>
 					<QueryClientProvider client={queryClient}>
-						<RouterProvider router={router} />
+						<InnerApp />
 					</QueryClientProvider>
 				</ConvexProviderWithClerk>
 			</ClerkProvider>

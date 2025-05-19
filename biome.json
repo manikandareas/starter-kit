@@ -7,8 +7,14 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["src/routeTree.gen.ts"],
-		"include": ["src/*", ".vscode/*", "index.html", "vite.config.js"]
+		"ignore": ["src/routeTree.gen.ts", "convex/_generated/*"],
+		"include": [
+			"src/*",
+			".vscode/*",
+			"index.html",
+			"vite.config.js",
+			"convex/*"
+		]
 	},
 	"formatter": {
 		"enabled": true,
@@ -20,7 +26,11 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"correctness": {
+				"noChildrenProp": "off",
+				"useExhaustiveDependencies": "off"
+			}
 		}
 	},
 	"javascript": {

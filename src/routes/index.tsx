@@ -11,6 +11,7 @@ import ShadowPNG from "/images/shadow.png";
 
 export const Route = createFileRoute("/")({
 	component: Index,
+	ssr: true,
 });
 
 function Index() {
@@ -85,7 +86,10 @@ function Index() {
 					</a>
 
 					<Unauthenticated>
-						<SignInButton mode="modal" fallbackRedirectUrl={"/onboarding"}>
+						<SignInButton
+							mode="modal"
+							fallbackRedirectUrl={"/onboarding/username"}
+						>
 							<Button size={"sm"} disabled={isLoading}>
 								{isLoading && <Loader2 className="animate-spin w-16 h-4" />}
 								{!isLoading && !isAuthenticated && "Get Started"}
@@ -148,7 +152,10 @@ function Index() {
 					</p>
 					<div className="mt-2 flex w-full items-center justify-center gap-2">
 						<Unauthenticated>
-							<SignInButton mode="modal" fallbackRedirectUrl={"/onboarding"}>
+							<SignInButton
+								mode="modal"
+								fallbackRedirectUrl={"/onboarding/username"}
+							>
 								<Button size={"sm"} disabled={isLoading}>
 									{isLoading && <Loader2 className="animate-spin w-16 h-4" />}
 									{!isLoading && !isAuthenticated && "Get Started"}
@@ -549,7 +556,10 @@ function Index() {
 							Build your app on a solid, scalable, well-tested foundation.
 						</p>
 						<Unauthenticated>
-							<SignInButton mode="modal" fallbackRedirectUrl={"/onboarding"}>
+							<SignInButton
+								mode="modal"
+								fallbackRedirectUrl={"/onboarding/username"}
+							>
 								<Button size={"sm"} disabled={isLoading}>
 									{isLoading && <Loader2 className="animate-spin w-16 h-4" />}
 									{!isLoading && !isAuthenticated && "Get Started"}
