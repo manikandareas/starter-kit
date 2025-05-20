@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useConvexMutation } from "@convex-dev/react-query";
+import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { api } from "@cvx/_generated/api";
 import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { z } from "zod";
 
 export const Route = createFileRoute(
@@ -28,6 +29,7 @@ const onboardingSchema = z.object({
 
 export default function OnboardingUsername() {
 	const navigate = useNavigate();
+	const { data: user } = useQuery(convexQuery(api.users.getCurrentUser, {}));
 
 	const { mutateAsync: completeOnboarding, isPending } = useMutation({
 		mutationFn: useConvexMutation(api.app.completeOnboarding),
@@ -49,6 +51,12 @@ export default function OnboardingUsername() {
 			onChange: onboardingSchema,
 		},
 	});
+
+	useEffect(() => {
+		if (user?.alreadyOnboarded) {
+			navigate({ to: "/dashboard" });
+		}
+	}, [user]);
 
 	return (
 		<div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">

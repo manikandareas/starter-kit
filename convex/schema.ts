@@ -1,6 +1,10 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+/**
+ * Defines the database schema for the application.
+ * This includes definitions for 'tasks' and 'users' tables.
+ */
 export default defineSchema({
 	tasks: defineTable({
 		text: v.string(),

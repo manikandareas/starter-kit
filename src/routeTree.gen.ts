@@ -16,14 +16,20 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppAuthenticatedImport } from './routes/_app/_authenticated'
-import { Route as AppAuthenticatedDashboardImport } from './routes/_app/_authenticated/dashboard'
 import { Route as AppAuthenticatedOnboardingLayoutImport } from './routes/_app/_authenticated/onboarding/_layout'
+import { Route as AppAuthenticatedDashboardLayoutImport } from './routes/_app/_authenticated/dashboard/_layout'
+import { Route as AppAuthenticatedDashboardLayoutIndexImport } from './routes/_app/_authenticated/dashboard/_layout.index'
 import { Route as AppAuthenticatedOnboardingLayoutUsernameImport } from './routes/_app/_authenticated/onboarding/_layout.username'
+import { Route as AppAuthenticatedDashboardLayoutSettingsImport } from './routes/_app/_authenticated/dashboard/_layout.settings'
+import { Route as AppAuthenticatedDashboardLayoutSettingsIndexImport } from './routes/_app/_authenticated/dashboard/_layout.settings.index'
 
 // Create Virtual Routes
 
 const AppAuthenticatedOnboardingImport = createFileRoute(
   '/_app/_authenticated/onboarding',
+)()
+const AppAuthenticatedDashboardImport = createFileRoute(
+  '/_app/_authenticated/dashboard',
 )()
 
 // Create/Update Routes
@@ -64,11 +70,38 @@ const AppAuthenticatedOnboardingLayoutRoute =
     getParentRoute: () => AppAuthenticatedOnboardingRoute,
   } as any)
 
+const AppAuthenticatedDashboardLayoutRoute =
+  AppAuthenticatedDashboardLayoutImport.update({
+    id: '/_layout',
+    getParentRoute: () => AppAuthenticatedDashboardRoute,
+  } as any)
+
+const AppAuthenticatedDashboardLayoutIndexRoute =
+  AppAuthenticatedDashboardLayoutIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAuthenticatedDashboardLayoutRoute,
+  } as any)
+
 const AppAuthenticatedOnboardingLayoutUsernameRoute =
   AppAuthenticatedOnboardingLayoutUsernameImport.update({
     id: '/username',
     path: '/username',
     getParentRoute: () => AppAuthenticatedOnboardingLayoutRoute,
+  } as any)
+
+const AppAuthenticatedDashboardLayoutSettingsRoute =
+  AppAuthenticatedDashboardLayoutSettingsImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AppAuthenticatedDashboardLayoutRoute,
+  } as any)
+
+const AppAuthenticatedDashboardLayoutSettingsIndexRoute =
+  AppAuthenticatedDashboardLayoutSettingsIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAuthenticatedDashboardLayoutSettingsRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -103,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAuthenticatedDashboardImport
       parentRoute: typeof AppAuthenticatedImport
     }
+    '/_app/_authenticated/dashboard/_layout': {
+      id: '/_app/_authenticated/dashboard/_layout'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppAuthenticatedDashboardLayoutImport
+      parentRoute: typeof AppAuthenticatedDashboardRoute
+    }
     '/_app/_authenticated/onboarding': {
       id: '/_app/_authenticated/onboarding'
       path: '/onboarding'
@@ -117,6 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAuthenticatedOnboardingLayoutImport
       parentRoute: typeof AppAuthenticatedOnboardingRoute
     }
+    '/_app/_authenticated/dashboard/_layout/settings': {
+      id: '/_app/_authenticated/dashboard/_layout/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof AppAuthenticatedDashboardLayoutSettingsImport
+      parentRoute: typeof AppAuthenticatedDashboardLayoutImport
+    }
     '/_app/_authenticated/onboarding/_layout/username': {
       id: '/_app/_authenticated/onboarding/_layout/username'
       path: '/username'
@@ -124,10 +171,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAuthenticatedOnboardingLayoutUsernameImport
       parentRoute: typeof AppAuthenticatedOnboardingLayoutImport
     }
+    '/_app/_authenticated/dashboard/_layout/': {
+      id: '/_app/_authenticated/dashboard/_layout/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AppAuthenticatedDashboardLayoutIndexImport
+      parentRoute: typeof AppAuthenticatedDashboardLayoutImport
+    }
+    '/_app/_authenticated/dashboard/_layout/settings/': {
+      id: '/_app/_authenticated/dashboard/_layout/settings/'
+      path: '/'
+      fullPath: '/dashboard/settings/'
+      preLoaderRoute: typeof AppAuthenticatedDashboardLayoutSettingsIndexImport
+      parentRoute: typeof AppAuthenticatedDashboardLayoutSettingsImport
+    }
   }
 }
 
 // Create and export the route tree
+
+interface AppAuthenticatedDashboardLayoutSettingsRouteChildren {
+  AppAuthenticatedDashboardLayoutSettingsIndexRoute: typeof AppAuthenticatedDashboardLayoutSettingsIndexRoute
+}
+
+const AppAuthenticatedDashboardLayoutSettingsRouteChildren: AppAuthenticatedDashboardLayoutSettingsRouteChildren =
+  {
+    AppAuthenticatedDashboardLayoutSettingsIndexRoute:
+      AppAuthenticatedDashboardLayoutSettingsIndexRoute,
+  }
+
+const AppAuthenticatedDashboardLayoutSettingsRouteWithChildren =
+  AppAuthenticatedDashboardLayoutSettingsRoute._addFileChildren(
+    AppAuthenticatedDashboardLayoutSettingsRouteChildren,
+  )
+
+interface AppAuthenticatedDashboardLayoutRouteChildren {
+  AppAuthenticatedDashboardLayoutSettingsRoute: typeof AppAuthenticatedDashboardLayoutSettingsRouteWithChildren
+  AppAuthenticatedDashboardLayoutIndexRoute: typeof AppAuthenticatedDashboardLayoutIndexRoute
+}
+
+const AppAuthenticatedDashboardLayoutRouteChildren: AppAuthenticatedDashboardLayoutRouteChildren =
+  {
+    AppAuthenticatedDashboardLayoutSettingsRoute:
+      AppAuthenticatedDashboardLayoutSettingsRouteWithChildren,
+    AppAuthenticatedDashboardLayoutIndexRoute:
+      AppAuthenticatedDashboardLayoutIndexRoute,
+  }
+
+const AppAuthenticatedDashboardLayoutRouteWithChildren =
+  AppAuthenticatedDashboardLayoutRoute._addFileChildren(
+    AppAuthenticatedDashboardLayoutRouteChildren,
+  )
+
+interface AppAuthenticatedDashboardRouteChildren {
+  AppAuthenticatedDashboardLayoutRoute: typeof AppAuthenticatedDashboardLayoutRouteWithChildren
+}
+
+const AppAuthenticatedDashboardRouteChildren: AppAuthenticatedDashboardRouteChildren =
+  {
+    AppAuthenticatedDashboardLayoutRoute:
+      AppAuthenticatedDashboardLayoutRouteWithChildren,
+  }
+
+const AppAuthenticatedDashboardRouteWithChildren =
+  AppAuthenticatedDashboardRoute._addFileChildren(
+    AppAuthenticatedDashboardRouteChildren,
+  )
 
 interface AppAuthenticatedOnboardingLayoutRouteChildren {
   AppAuthenticatedOnboardingLayoutUsernameRoute: typeof AppAuthenticatedOnboardingLayoutUsernameRoute
@@ -160,12 +269,12 @@ const AppAuthenticatedOnboardingRouteWithChildren =
   )
 
 interface AppAuthenticatedRouteChildren {
-  AppAuthenticatedDashboardRoute: typeof AppAuthenticatedDashboardRoute
+  AppAuthenticatedDashboardRoute: typeof AppAuthenticatedDashboardRouteWithChildren
   AppAuthenticatedOnboardingRoute: typeof AppAuthenticatedOnboardingRouteWithChildren
 }
 
 const AppAuthenticatedRouteChildren: AppAuthenticatedRouteChildren = {
-  AppAuthenticatedDashboardRoute: AppAuthenticatedDashboardRoute,
+  AppAuthenticatedDashboardRoute: AppAuthenticatedDashboardRouteWithChildren,
   AppAuthenticatedOnboardingRoute: AppAuthenticatedOnboardingRouteWithChildren,
 }
 
@@ -185,17 +294,21 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AppAuthenticatedRouteWithChildren
-  '/dashboard': typeof AppAuthenticatedDashboardRoute
+  '/dashboard': typeof AppAuthenticatedDashboardLayoutRouteWithChildren
   '/onboarding': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
+  '/dashboard/settings': typeof AppAuthenticatedDashboardLayoutSettingsRouteWithChildren
   '/onboarding/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
+  '/dashboard/': typeof AppAuthenticatedDashboardLayoutIndexRoute
+  '/dashboard/settings/': typeof AppAuthenticatedDashboardLayoutSettingsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AppAuthenticatedRouteWithChildren
-  '/dashboard': typeof AppAuthenticatedDashboardRoute
+  '/dashboard': typeof AppAuthenticatedDashboardLayoutIndexRoute
   '/onboarding': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
   '/onboarding/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
+  '/dashboard/settings': typeof AppAuthenticatedDashboardLayoutSettingsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -203,26 +316,48 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/_authenticated': typeof AppAuthenticatedRouteWithChildren
-  '/_app/_authenticated/dashboard': typeof AppAuthenticatedDashboardRoute
+  '/_app/_authenticated/dashboard': typeof AppAuthenticatedDashboardRouteWithChildren
+  '/_app/_authenticated/dashboard/_layout': typeof AppAuthenticatedDashboardLayoutRouteWithChildren
   '/_app/_authenticated/onboarding': typeof AppAuthenticatedOnboardingRouteWithChildren
   '/_app/_authenticated/onboarding/_layout': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
+  '/_app/_authenticated/dashboard/_layout/settings': typeof AppAuthenticatedDashboardLayoutSettingsRouteWithChildren
   '/_app/_authenticated/onboarding/_layout/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
+  '/_app/_authenticated/dashboard/_layout/': typeof AppAuthenticatedDashboardLayoutIndexRoute
+  '/_app/_authenticated/dashboard/_layout/settings/': typeof AppAuthenticatedDashboardLayoutSettingsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/dashboard' | '/onboarding' | '/onboarding/username'
+  fullPaths:
+    | '/'
+    | ''
+    | '/dashboard'
+    | '/onboarding'
+    | '/dashboard/settings'
+    | '/onboarding/username'
+    | '/dashboard/'
+    | '/dashboard/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/dashboard' | '/onboarding' | '/onboarding/username'
+  to:
+    | '/'
+    | ''
+    | '/dashboard'
+    | '/onboarding'
+    | '/onboarding/username'
+    | '/dashboard/settings'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/_app/_authenticated'
     | '/_app/_authenticated/dashboard'
+    | '/_app/_authenticated/dashboard/_layout'
     | '/_app/_authenticated/onboarding'
     | '/_app/_authenticated/onboarding/_layout'
+    | '/_app/_authenticated/dashboard/_layout/settings'
     | '/_app/_authenticated/onboarding/_layout/username'
+    | '/_app/_authenticated/dashboard/_layout/'
+    | '/_app/_authenticated/dashboard/_layout/settings/'
   fileRoutesById: FileRoutesById
 }
 
@@ -268,8 +403,19 @@ export const routeTree = rootRoute
       ]
     },
     "/_app/_authenticated/dashboard": {
-      "filePath": "_app/_authenticated/dashboard.tsx",
-      "parent": "/_app/_authenticated"
+      "filePath": "_app/_authenticated/dashboard",
+      "parent": "/_app/_authenticated",
+      "children": [
+        "/_app/_authenticated/dashboard/_layout"
+      ]
+    },
+    "/_app/_authenticated/dashboard/_layout": {
+      "filePath": "_app/_authenticated/dashboard/_layout.tsx",
+      "parent": "/_app/_authenticated/dashboard",
+      "children": [
+        "/_app/_authenticated/dashboard/_layout/settings",
+        "/_app/_authenticated/dashboard/_layout/"
+      ]
     },
     "/_app/_authenticated/onboarding": {
       "filePath": "_app/_authenticated/onboarding",
@@ -285,9 +431,24 @@ export const routeTree = rootRoute
         "/_app/_authenticated/onboarding/_layout/username"
       ]
     },
+    "/_app/_authenticated/dashboard/_layout/settings": {
+      "filePath": "_app/_authenticated/dashboard/_layout.settings.tsx",
+      "parent": "/_app/_authenticated/dashboard/_layout",
+      "children": [
+        "/_app/_authenticated/dashboard/_layout/settings/"
+      ]
+    },
     "/_app/_authenticated/onboarding/_layout/username": {
       "filePath": "_app/_authenticated/onboarding/_layout.username.tsx",
       "parent": "/_app/_authenticated/onboarding/_layout"
+    },
+    "/_app/_authenticated/dashboard/_layout/": {
+      "filePath": "_app/_authenticated/dashboard/_layout.index.tsx",
+      "parent": "/_app/_authenticated/dashboard/_layout"
+    },
+    "/_app/_authenticated/dashboard/_layout/settings/": {
+      "filePath": "_app/_authenticated/dashboard/_layout.settings.index.tsx",
+      "parent": "/_app/_authenticated/dashboard/_layout/settings"
     }
   }
 }
