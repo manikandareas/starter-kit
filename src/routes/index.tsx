@@ -88,7 +88,8 @@ function Index() {
 					<Unauthenticated>
 						<SignInButton
 							mode="modal"
-							fallbackRedirectUrl={"/onboarding/username"}
+							fallbackRedirectUrl={"/dashboard"}
+							signUpFallbackRedirectUrl={"/onboarding/username"}
 						>
 							<Button size={"sm"} disabled={isLoading}>
 								{isLoading && <Loader2 className="animate-spin w-16 h-4" />}
@@ -154,7 +155,8 @@ function Index() {
 						<Unauthenticated>
 							<SignInButton
 								mode="modal"
-								fallbackRedirectUrl={"/onboarding/username"}
+								fallbackRedirectUrl={"/dashboard"}
+								signUpFallbackRedirectUrl={"/onboarding/username"}
 							>
 								<Button size={"sm"} disabled={isLoading}>
 									{isLoading && <Loader2 className="animate-spin w-16 h-4" />}
@@ -558,7 +560,8 @@ function Index() {
 						<Unauthenticated>
 							<SignInButton
 								mode="modal"
-								fallbackRedirectUrl={"/onboarding/username"}
+								fallbackRedirectUrl={"/dashboard"}
+								signUpFallbackRedirectUrl={"/onboarding/username"}
 							>
 								<Button size={"sm"} disabled={isLoading}>
 									{isLoading && <Loader2 className="animate-spin w-16 h-4" />}
