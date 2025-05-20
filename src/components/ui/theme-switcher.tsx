@@ -7,51 +7,16 @@ import {
 	SelectTrigger,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useTheme } from "../theme-provider";
 
 const themes = ["light", "dark", "system"] as const;
 
-const useTheme = () => {
-	const [currentTheme, setCurrentTheme] = useState<"light" | "dark" | "system">(
-		localStorage.theme || "system",
-	);
-	const [initialized, setInitialized] = useState(false);
-
-	// A similar script is inlined in the <head> of index.html.
-	useEffect(() => {
-		if (!initialized) {
-			setInitialized(true);
-			return;
-		}
-		if (currentTheme === "system") {
-			localStorage.removeItem("theme");
-		} else {
-			localStorage.theme = currentTheme;
-		}
-		if (
-			currentTheme === "dark" ||
-			(currentTheme === "system" &&
-				window.matchMedia("(prefers-color-scheme: dark)").matches)
-		) {
-			document.documentElement.classList.add("dark");
-			document.documentElement.style.colorScheme = "dark";
-		} else {
-			document.documentElement.classList.remove("dark");
-			document.documentElement.style.colorScheme = "light";
-		}
-	}, [currentTheme, initialized]);
-
-	return [currentTheme, setCurrentTheme] as const;
-};
-
 export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
-	const [currentTheme, setCurrentTheme] = useTheme();
+	const { setTheme, theme } = useTheme();
 	return (
 		<Select
-			value={currentTheme}
-			onValueChange={(theme) =>
-				setCurrentTheme(theme as (typeof themes)[number])
-			}
+			value={theme}
+			onValueChange={(theme) => setTheme(theme as (typeof themes)[number])}
 		>
 			<SelectTrigger
 				className={cn(
@@ -60,26 +25,26 @@ export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
 				)}
 			>
 				<div className="flex items-start gap-2">
-					{currentTheme === "light" ? (
+					{theme === "light" ? (
 						<Sun className="h-[14px] w-[14px]" />
-					) : currentTheme === "dark" ? (
+					) : theme === "dark" ? (
 						<Moon className="h-[14px] w-[14px]" />
 					) : (
 						<Monitor className="h-[14px] w-[14px]" />
 					)}
 					<span className="text-xs font-medium">
-						{currentTheme.charAt(0).toUpperCase() + currentTheme.slice(1)}
+						{theme.charAt(0).toUpperCase() + theme.slice(1)}
 					</span>
 				</div>
 			</SelectTrigger>
 			<SelectContent>
-				{themes.map((theme) => (
+				{themes.map((t) => (
 					<SelectItem
-						key={theme}
-						value={theme}
-						className={`text-sm font-medium text-primary/60 ${theme === currentTheme && "text-primary"}`}
+						key={t}
+						value={t}
+						className={`text-sm font-medium text-primary/60 ${t === theme && "text-primary"}`}
 					>
-						{theme && theme.charAt(0).toUpperCase() + theme.slice(1)}
+						{t && t.charAt(0).toUpperCase() + t.slice(1)}
 					</SelectItem>
 				))}
 			</SelectContent>
@@ -88,7 +53,7 @@ export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
 }
 
 export function ThemeSwitcherHome() {
-	const [, setCurrentTheme] = useTheme();
+	const { setTheme } = useTheme();
 	return (
 		<div className="flex gap-3">
 			{themes.map((theme) => (
@@ -96,7 +61,7 @@ export function ThemeSwitcherHome() {
 					key={theme}
 					name="theme"
 					type="button"
-					onClick={() => setCurrentTheme(theme)}
+					onClick={() => setTheme(theme)}
 				>
 					{theme === "light" ? (
 						<Sun className="h-4 w-4 text-primary/80 hover:text-primary" />

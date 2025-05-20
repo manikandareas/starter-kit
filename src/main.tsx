@@ -11,6 +11,7 @@ import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConvexReactClient, useConvexAuth } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { ThemeProvider } from "./components/theme-provider.tsx";
 import { env } from "./env.ts";
 import reportWebVitals from "./reportWebVitals.ts";
 
@@ -81,13 +82,15 @@ if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
 		<StrictMode>
-			<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-				<ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-					<QueryClientProvider client={queryClient}>
-						<InnerApp />
-					</QueryClientProvider>
-				</ConvexProviderWithClerk>
-			</ClerkProvider>
+			<ThemeProvider>
+				<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+					<ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+						<QueryClientProvider client={queryClient}>
+							<InnerApp />
+						</QueryClientProvider>
+					</ConvexProviderWithClerk>
+				</ClerkProvider>
+			</ThemeProvider>
 		</StrictMode>,
 	);
 }
