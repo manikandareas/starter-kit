@@ -100,7 +100,7 @@ function Index() {
 
 					<Authenticated>
 						<Link
-							to={"/"}
+							to={"/dashboard"}
 							className={buttonVariants({ size: "sm" })}
 							disabled={isLoading}
 						>
@@ -167,7 +167,7 @@ function Index() {
 
 						<Authenticated>
 							<Link
-								to={"/"}
+								to={"/dashboard"}
 								className={buttonVariants({ size: "sm" })}
 								disabled={isLoading}
 							>
@@ -572,7 +572,7 @@ function Index() {
 
 						<Authenticated>
 							<Link
-								to={"/"}
+								to={"/dashboard"}
 								className={buttonVariants({ size: "sm" })}
 								disabled={isLoading}
 							>
