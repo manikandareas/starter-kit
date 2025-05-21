@@ -25,7 +25,6 @@ export const completeOnboarding = mutation({
 			alreadyOnboarded: true,
 			profileImage: identity.pictureUrl || "",
 			userId: identity.subject,
-			createdAt: Date.now(),
 		});
 
 		if (!user) {

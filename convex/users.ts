@@ -87,7 +87,6 @@ export const createOrUpdateUser = async (
 		email: args.email as string,
 		username: args.username as string,
 		profileImage: args.profileImage || "",
-		createdAt: args.createdAt || Date.now(),
 		alreadyOnboarded: args.alreadyOnboarded as boolean,
 	});
 

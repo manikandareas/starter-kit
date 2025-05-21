@@ -6,24 +6,20 @@ import ReactDOM from "react-dom/client";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
-import "./styles.css";
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConvexReactClient, useConvexAuth } from "convex/react";
+import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ThemeProvider } from "./components/theme-provider.tsx";
 import { env } from "./env.ts";
 import reportWebVitals from "./reportWebVitals.ts";
+import "./styles.css";
 
 // Create a new router instance
 const router = createRouter({
 	context: {
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		queryClient: undefined!,
-		auth: {
-			isAuthenticated: false,
-			isLoading: true,
-		},
 	},
 	routeTree,
 	defaultPreload: "intent",
@@ -61,16 +57,11 @@ if (!PUBLISHABLE_KEY) {
 }
 
 const InnerApp = () => {
-	const { isAuthenticated, isLoading } = useConvexAuth();
 	return (
 		<RouterProvider
 			router={router}
 			context={{
 				queryClient,
-				auth: {
-					isAuthenticated,
-					isLoading,
-				},
 			}}
 		/>
 	);
