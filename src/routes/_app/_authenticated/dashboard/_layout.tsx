@@ -1,3 +1,4 @@
+import { HeaderProvider } from "@/components/header-provider";
 import { Header } from "@/components/ui/header";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "@cvx/_generated/api";
@@ -15,10 +16,12 @@ function DashboardLayout() {
 		return null;
 	}
 	return (
-		<div className="flex min-h-[100vh] w-full flex-col bg-secondary dark:bg-black">
-			<Navigation user={user} />
-			<Header />
-			<Outlet />
-		</div>
+		<HeaderProvider>
+			<div className="flex min-h-[100vh] w-full flex-col bg-secondary dark:bg-black">
+				<Navigation user={user} />
+				<Header />
+				<Outlet />
+			</div>
+		</HeaderProvider>
 	);
 }
