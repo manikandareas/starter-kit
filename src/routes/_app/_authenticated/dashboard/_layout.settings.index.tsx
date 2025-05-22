@@ -19,6 +19,7 @@ export const Route = createFileRoute(
 	beforeLoad: () => ({
 		title: "Settings",
 	}),
+	ssr: true,
 });
 
 const usernameSchema = z

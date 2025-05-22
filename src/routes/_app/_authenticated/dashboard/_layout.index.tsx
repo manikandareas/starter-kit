@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_app/_authenticated/dashboard/_layout/")(
 		beforeLoad: () => ({
 			title: `${siteConfig.siteTitle} - Dashboard`,
 		}),
+		ssr: true,
 	},
 );
 

@@ -11,6 +11,7 @@ import ShadowPNG from "/images/shadow.png";
 
 export const Route = createFileRoute("/")({
 	component: Index,
+	ssr: true,
 });
 
 function Index() {
