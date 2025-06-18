@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/retroui/button";
 import { cn } from "@/lib/utils";
 import {
 	Link,
@@ -16,40 +16,27 @@ export const Route = createFileRoute(
 export default function DashboardSettingsLayout() {
 	const matchRoute = useMatchRoute();
 	const isSettingsPath = matchRoute({ to: "/dashboard/settings" });
-	//   const isBillingPath = matchRoute({ to: BillingSettingsRoute.fullPath });
+
 	return (
 		<div className="flex h-full w-full px-6 py-8">
 			<div className="mx-auto flex h-full w-full max-w-screen-xl gap-12">
 				<div className="hidden w-full max-w-64 flex-col gap-0.5 lg:flex">
 					<Link
 						to={"/dashboard/settings"}
-						className={cn(
-							`${buttonVariants({ variant: "ghost" })} ${isSettingsPath && "bg-primary/5"}`,
-							"justify-start rounded-md",
-						)}
+						// className={cn(
+						//    `${buttonVariants({ variant: "ghost" })} ${isSettingsPath && "bg-background"}`,
+						//    "justify-start rounded-md",
+						// )}
 					>
-						<span
+						<Button
+							variant={"outline"}
 							className={cn(
-								`text-sm text-primary/80 ${isSettingsPath && "font-medium text-primary"}`,
+								`text-sm w-full text-foreground ${isSettingsPath && "font-medium"}`,
 							)}
 						>
-							General
-						</span>
+							Umum
+						</Button>
 					</Link>
-					{/* <Link
-            to={BillingSettingsRoute.fullPath}
-            className={cn(
-              `${buttonVariants({ variant: "ghost" })} ${isBillingPath && "bg-primary/5"} justify-start rounded-md`,
-            )}
-          >
-            <span
-              className={cn(
-                `text-sm text-primary/80 ${isBillingPath && "font-medium text-primary"}`,
-              )}
-            >
-              Billing
-            </span>
-          </Link> */}
 				</div>
 
 				<Outlet />

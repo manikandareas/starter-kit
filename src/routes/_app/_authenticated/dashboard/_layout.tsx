@@ -17,7 +17,7 @@ function DashboardLayout() {
 	}
 	return (
 		<HeaderProvider>
-			<div className="flex min-h-[100vh] w-full flex-col bg-secondary dark:bg-black">
+			<div className="flex min-h-[100vh] w-full flex-col bg-background">
 				<Navigation user={user} />
 				<Header />
 				<Outlet />
