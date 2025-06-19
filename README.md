@@ -10,7 +10,7 @@ We've hand-picked a suite of robust and developer-friendly technologies:
 
 - **⚛️ React:** The king of UI libraries, for building beautiful and responsive interfaces.
 - **⚡ Vite:** Blazing-fast build tool and dev server. Say goodbye to long waits!
-- **🗺️ TanStack Router:** Effortless file-based routing. Managing your app's pages has never been easier.
+- **🗺️ TanStack Router:** Effortless file-based routing. See `src/routes/ROUTING.md` for more details.
 - **🔄 TanStack Query:** Master your data fetching and caching like a pro.
 - **🌬️ Tailwind CSS:** A utility-first CSS framework for designing stunning UIs with speed.
 - **🎨 Shadcn/ui:** Gorgeous, accessible UI components ready to drop into your app.
@@ -32,28 +32,46 @@ This starter kit isn't just a collection of tools, it's a productivity powerhous
 - **🛡️ Secure Environment Variables:** T3Env protects your sensitive data.
 - **👤 Effortless Authentication:** Clerk handles user sign-ups, logins, and more.
 - **💪 Powerful Backend:** Convex gives you a real-time database and serverless functions without the headache.
-
 ## 🚀 Let's Get This Rocket Off the Ground! (Getting Started)
 
-1. **Install the thrusters (dependencies):**
+1. **Install Dependencies:**
+   Get all the tools you need to build and run your app.
 
    ```bash
    pnpm install
    ```
 
-2. **Ignite the engines (start the dev server):**
+2. **Configure Environment Variables:**
+   - First, start the Convex dev server (required for setting env variables):
+     ```bash
+     npx convex dev
+     ```
+   - In a new terminal, create a `.env.local` file in your project root and add your Clerk publishable key:
+     ```bash
+     VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+     ```
+   - Set up Clerk's issuer URL for Convex (copy from the JWT_TEMPLATE in Clerk dashboard):
+     ```bash
+     npx convex env set CLERK_ISSUER_URL your_clerk_issuer_url
+     ```
 
-   ```bash
-   pnpm start
-   ```
+3. **Start the Development Servers:**
+   - In one terminal, start the frontend:
+     ```bash
+     pnpm dev
+     ```
+   - In another terminal (if not already running), the Convex backend:
+     ```bash
+     npx convex dev
+     ```
 
-   And in a separate terminal, launch the Convex backend:
+   Once both are running, your app will be live at [http://localhost:3000](http://localhost:3000)!
 
-   ```bash
-   npx convex dev
-   ```
+---
 
-   Your app will be live at `http://localhost:3000`!
+> 💡 _Need more details?_  
+> - Check [Convex + Clerk integration docs](https://clerk.com/docs/integrations/databases/convex) for advanced setup.
+> - See `src/routes/ROUTING.md` for route and navigation tips.
 
 ## 📦 Preparing for Launch (Building for Production)
 
@@ -72,7 +90,7 @@ Here's a map of your new project:
 - `src/`: The heart of your application.
   - `components/`: Reusable UI building blocks.
   - `lib/`: Handy utility functions.
-  - `routes/`: Your app's pages and layouts.
+  - `src/routes/`: Your app's pages and layouts. See `src/routes/ROUTING.md` for routing documentation.
   - `main.tsx`: The main entry point of your React application.
 - `package.json`: Your project's manifest, listing dependencies and scripts.
 - `README.md`: You're looking at it! 😉
@@ -122,100 +140,7 @@ Easily add [Shadcn](https://ui.shadcn.com/) components:
 pnpx shadcn@latest add button
 ```
 
-## 🧭 Advanced Navigation with TanStack Router
 
-[TanStack Router](https://tanstack.com/router) powers our file-based routing, making navigation a breeze.
-
-### Adding A Route
-
-To add a new route to your application just add another a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
-import { Link } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## 🎣 Data Fetching: Reel in Your Data
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
 
 ### React-Query
 
@@ -297,83 +222,6 @@ export default App;
 ```
 
 You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
-
-## 🗃️ State Management: Keep Calm and Manage State
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
-
-```bash
-pnpm add @tanstack/store
-```
-
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
-
-export default App;
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
-
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
-
-export default App;
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-## 🗑️ Demo Files: Feel Free to Declutter
-
-Files prefixed with `demo` are just examples. You can safely remove them once you're comfortable.
 
 ## 📚 Want to Learn More?
 
