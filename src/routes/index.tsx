@@ -1,4 +1,5 @@
 import { Button } from "@/components/retroui/button";
+import { useTheme } from "@/components/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignInButton } from "@clerk/clerk-react";
@@ -13,6 +14,7 @@ import {
 	Loader2,
 	Star,
 } from "lucide-react";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
 	component: LandingPage,
@@ -21,6 +23,17 @@ export const Route = createFileRoute("/")({
 
 export default function LandingPage() {
 	const { isAuthenticated, isLoading } = useConvexAuth();
+	const { theme, setTheme } = useTheme();
+
+	useEffect(() => {
+		const previousTheme = theme;
+		setTheme("light");
+
+		return () => {
+			setTheme(previousTheme);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	return (
 		<div className="min-h-screen bg-yellow-300 scroll-smooth">
 			{/* Header */}
