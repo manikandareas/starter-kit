@@ -73,7 +73,7 @@ export default function LandingPage() {
 							<Unauthenticated>
 								<SignInButton
 									mode="modal"
-									fallbackRedirectUrl={"/sites"}
+									fallbackRedirectUrl={"/dashboard"}
 									signUpFallbackRedirectUrl={"/onboarding/username"}
 								>
 									<Button size={"sm"} disabled={isLoading}>
