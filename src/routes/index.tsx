@@ -12,7 +12,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
 	const { isLoading, isAuthenticated } = useConvexAuth();
-	const theme = "dark";
+	// const theme = "dark";
 	return (
 		<div className="relative flex h-full w-full flex-col bg-card">
 			{/* Navigation */}
