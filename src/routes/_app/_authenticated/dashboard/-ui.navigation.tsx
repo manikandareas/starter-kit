@@ -27,7 +27,7 @@ export function Navigation({ user }: { user: Doc<"users"> }) {
 		return null;
 	}
 	return (
-		<nav className="sticky top-0 z-[10] flex w-full flex-col border-b border-border bg-card px-6">
+		<nav className="sticky top-0 z-[9999] flex w-full flex-col border-b border-border bg-card px-6">
 			<div className="mx-auto flex w-full max-w-screen-xl items-center justify-between py-3">
 				<div className="flex h-10 items-center gap-2">
 					<Link to={"/"} className="flex h-10 items-center gap-1">

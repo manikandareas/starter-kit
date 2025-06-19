@@ -13,7 +13,6 @@ import {
 	Loader2,
 	Star,
 } from "lucide-react";
-// import "../home.css";
 
 export const Route = createFileRoute("/")({
 	component: LandingPage,
