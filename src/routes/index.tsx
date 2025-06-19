@@ -204,7 +204,7 @@ export default function LandingPage() {
 								name: "T3Env",
 								desc: "Type-safe environment management.",
 							},
-						].map((tech, index) => (
+						].map((tech) => (
 							<Card
 								key={tech.name}
 								className="border-4 border-black bg-white shadow-[6px_6px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#000000] transition-all hover:transform hover:-translate-y-1"
@@ -278,7 +278,7 @@ export default function LandingPage() {
 								title: "Environment Safety",
 								desc: "Manage secrets safely with T3Env.",
 							},
-						].map((feature, index) => (
+						].map((feature) => (
 							<Card
 								key={feature.title}
 								className="border-4 border-black bg-white shadow-[6px_6px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#000000] transition-all"
@@ -335,7 +335,7 @@ export default function LandingPage() {
 								desc: "http://localhost:3000",
 								icon: "🎉",
 							},
-						].map((step, index) => (
+						].map((step) => (
 							<Card
 								key={step.step}
 								className="border-4 border-black bg-white shadow-[6px_6px_0px_0px_#000000] text-center"
@@ -421,7 +421,7 @@ export default function LandingPage() {
 							{ icon: "👁️", title: "Devtools for TanStack Query & Router" },
 							{ icon: "🧪", title: "Built-in tests with Vitest" },
 							{ icon: "💾", title: "Real-time DB out of the box" },
-						].map((item, index) => (
+						].map((item) => (
 							<Card
 								key={item.title}
 								className="border-4 border-black bg-white shadow-[4px_4px_0px_0px_#000000] text-center"
